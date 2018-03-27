@@ -1,7 +1,12 @@
 class CommandLineInterface
 
   def greet
-    puts 'Welcome to the NBA Fantasy Mock Draft.'
+    puts 'Welcome to the NBA Fantasy Mock Draft. Please enter your name.'
+    gets.chomp
+  end
+
+  def create_username(input)
+    User.create(name: input)
   end
 
   def input_player_name
@@ -18,22 +23,18 @@ class CommandLineInterface
     p "Add #{player_name.full_name} to your roster? Enter (Y/N)."
     gets.chomp
   end
-
-  def add_player_to_roster(input)
-
-  end
-
+  
 end
 
 
 def run
   new_cli = CommandLineInterface.new
-  new_roster = []
-  new_cli.greet
+  username = new_cli.greet
+  new_user = new_cli.create_username(username)
   input = new_cli.input_player_name
   player_name = new_cli.find_player_by_name(input)
   input2 = new_cli.ask_user_add(player_name)
   if input2 == 'Y'
-    add_player_to_roster(input2)
+    new_user.add_player_to_roster(player_name)
   end
 end
