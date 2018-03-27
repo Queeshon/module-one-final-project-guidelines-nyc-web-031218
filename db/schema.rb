@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 3) do
     t.string "last_name"
     t.string "full_name"
     t.string "position"
+    t.string "team_name"
   end
 
   create_table "users", force: :cascade do |t|

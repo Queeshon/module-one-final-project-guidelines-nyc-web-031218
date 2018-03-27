@@ -5,6 +5,7 @@ class CreatePlayers < ActiveRecord::Migration[5.0]
       t.string :last_name
       t.string :full_name
       t.string :position
+      t.string :team_name
     end
   end
 end

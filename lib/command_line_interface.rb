@@ -1,7 +1,7 @@
 class CommandLineInterface
 
   def greet
-    puts 'Welcome to the NBA Fantasy Mock Draft. Please enter your name.'
+    puts 'Welcome to the NBA Fantasy Mock Draft. Please enter your name.'.yellow
     gets.chomp
   end
 
@@ -10,19 +10,23 @@ class CommandLineInterface
   end
 
   def input_choice
-    puts 'To begin your draft, search for desired players.'
-    puts "to search a player by name enter 1"
-    puts 'To search a player by position, enter 2'
+    puts 'To begin your draft, search for desired players.'.yellow
+    sleep(5)
+    puts "To search a player by name, enter 1.".yellow
+    sleep(2)
+    puts 'To search players by position, enter 2.'.yellow
+    sleep(2)
+    puts "To search players by team, enter 3.".yellow
     gets.chomp
   end
 
   def input_player_name
-    puts 'Enter player name.'
+    puts 'Enter player name.'.yellow
     gets.chomp
   end
 
   def input_player_position
-    puts 'Enter player position.'
+    puts 'Enter player position.'.yellow
     gets.chomp
   end
 
@@ -40,7 +44,7 @@ class CommandLineInterface
   end
 
   def ask_user_add(player_name)
-    p "Add #{player_name.full_name} to your roster? Enter (Y/N)."
+    p "Add #{player_name.full_name} to your roster? Enter (Y/N).".blue
     gets.chomp
   end
 
@@ -63,8 +67,9 @@ def run
     elsif input == "2"
       nba_posiiton = new_cli.input_player_position
       players_position = new_cli.find_player_by_position(nba_posiiton)
+      p players_position.map { |player| player.full_name }
       input3 = new_cli.input_player_name
-      player_name = find_player_name_by_position(players_position, input3)
+      player_name = new_cli.find_player_name_by_position(players_position, input3)
       input4 = new_cli.ask_user_add(player_name)
         if input4 == "Y"
           new_user.add_player_to_roster(player_name)
