@@ -12,7 +12,7 @@ def get_player_name
       value.each do |standard, player_names_array|
         player_names_array.each do |player_info|
 
-          Player.create(first_name: player_info['firstName'], last_name: player_info['lastName'])
+          Player.create(first_name: player_info['firstName'], last_name: player_info['lastName'], full_name: player_info['firstName'] + ' ' + player_info['lastName'])
 
         end
       end
