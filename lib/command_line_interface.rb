@@ -59,17 +59,15 @@ class CommandLineInterface
   end
 
   def ask_user_add(player_name)
-    p "Add #{player_name.full_name} to your roster? Enter (Y/N)."
+    puts "Add #{player_name.full_name} to your roster? Enter (Y/N).".bold.yellow
     gets.chomp
   end
-
-  def neglected_player
-    p ""
-  end
-
 end
 
-
+def check_roster(player_name)
+  all = User.all_drafted_players
+  all.include?(player_name)
+end
 
 
 
@@ -80,19 +78,17 @@ def run
   #binding.pry
 
   loop do
-    
-
     full_name_all = Player.all.map { |player| player.full_name }
     team_all = Player.all.map {|player| player.team_name}
     input = new_cli.input_selection_choice
     if new_user.roster.length > 4
-      p "Roster full. View roster?"
-      p new_user.roster.green
+      puts "Roster full.".bold.green
+      puts new_user.roster.bold.green
       break
     #this is the method to call a player by name.
     elsif input == "1"
       nba_player = new_cli.input_player_name
-      if full_name_all.include?(nba_player)
+      if full_name_all.include?(nba_player) && !check_roster(nba_player)
         player_name = new_cli.find_player_by_name(nba_player)
         yes_or_no = new_cli.ask_user_add(player_name)
         if (yes_or_no == 'Y' || yes_or_no == 'y') && !new_user.roster.include?(player_name.full_name)
@@ -100,15 +96,15 @@ def run
           new_user.reload
           #user_roster +=1
         elsif new_user.roster.include?(player_name.full_name)
-          p "Player already in roster. Select again."
+          puts "Player already in roster. Select again.".bold.red
           redo
         elsif yes_or_no == 'N' || yes_or_no == 'n'
           redo
         else
-          p "Invalid response. Please enter Y/N."
+          puts "Invalid response. Please enter Y/N.".bold.red
         end
       else
-        p "Invalid name. Please spell-check."
+        puts "Invalid name or player already drafted. Select another player.".bold.red
         redo
       end
     #this is the method to call a player by position
@@ -118,7 +114,7 @@ def run
         players_position = new_cli.find_player_by_position(nba_position)
         p players_position.map { |player| player.full_name }
         nba_player = new_cli.input_player_name
-        if full_name_all.include?(nba_player)
+        if full_name_all.include?(nba_player) && !check_roster(nba_player)
           player_name = new_cli.find_player_name_by_position(players_position, nba_player)
           yes_or_no = new_cli.ask_user_add(player_name)
               if (yes_or_no == 'Y' || yes_or_no == 'y') && !new_user.roster.include?(player_name.full_name)
@@ -126,18 +122,18 @@ def run
                 new_user.reload
                 #user_roster +=1
               elsif new_user.roster.include?(player_name.full_name)
-                p "Player already in roster. Select again."
+                puts "Player already in roster. Select again.".bold.red
                 redo
               elsif yes_or_no == 'N' || yes_or_no == 'n'
                 redo
               else
-                p "Invalid response. Please enter Y/N."
+                puts "Invalid response. Please enter Y/N.".bold.red
               end
           else
-            p "Invalid name. Please spell-check."
+            puts "Invalid name or player already drafted. Select another player.".bold.red
           end
       else
-        p "Invalid response. Please enter C/G/F."
+        puts "Invalid response. Please enter C/G/F.".bold.red
         redo
       end
     #this is the method to call a player by team
@@ -145,9 +141,9 @@ def run
       nba_team = new_cli.input_player_team
       if team_all.include?(nba_team)
       roster = new_cli.find_player_by_team(nba_team)
-      p roster.map { |player| player.full_name }
+      puts roster.map { |player| player.full_name + ", " + player.position }
       nba_player = new_cli.input_player_name
-        if full_name_all.include?(nba_player)
+        if full_name_all.include?(nba_player) && !check_roster(nba_player)
           player_name = new_cli.find_player_name_by_team(roster, nba_player)
           yes_or_no = new_cli.ask_user_add(player_name)
             if (yes_or_no == 'Y' || yes_or_no == 'y') && !new_user.roster.include?(player_name.full_name)
@@ -155,22 +151,22 @@ def run
               new_user.reload
               #user_roster +=1
             elsif new_user.roster.include?(player_name.full_name)
-              p "Player already in roster. Select again."
+              puts "Player already in roster. Select again.".bold.red
               redo
             elsif yes_or_no == 'N' || yes_or_no == 'n'
               redo
             else
-              p "Invalid response. Please enter Y/N."
+              puts "Invalid response. Please enter Y/N.".bold.red
             end
           else
-            p "Invalid name. Please spell-check."
+            puts "Invalid name or player already drafted. Select another player.".bold.red
           end
         else
-          p "Invalid name. Please spell-check."
+          puts "Invalid name. Please spell-check.".bold.red
         end
     #this is the method to break the loop
     elsif input == "4"
-      p "K"
+      puts "K".bold.cyan
       break
     else
       puts "Invalid response. Please enter 1, 2, or 3.".bold.red

@@ -10,4 +10,8 @@ class User < ActiveRecord::Base
     Draft.create(player_id: player.id, user_id: self.id)
   end
 
+  def self.all_drafted_players
+    User.all.map { |user| user.roster }.flatten
+  end
+
 end
