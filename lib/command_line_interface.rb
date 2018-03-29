@@ -19,9 +19,13 @@ class CommandLineInterface
     sleep(1)
     puts "To search players by team, enter 3.".bold.green
     sleep(1)
-    puts "To delete your current roster, enter 4.".bold.yellow
+    puts "To delete the last player added, enter 4.".bold.yellow
     sleep(1)
-    puts "To exit the NBA Fantasy Mock Draft application, enter 5.".bold.red
+    puts "To delete a specific player, enter 5.".bold.yellow
+    sleep(1)
+    puts "To delete your current roster, enter 6.".bold.yellow
+    sleep(1)
+    puts "To exit the NBA Fantasy Mock Draft application, enter 7.".bold.red
     gets.chomp
   end
 
@@ -62,6 +66,16 @@ class CommandLineInterface
 
   def ask_user_add(player_name)
     puts "Add #{player_name.full_name} to your roster? Enter (Y/N).".bold.green
+    gets.chomp
+  end
+
+  def are_you_really_sure
+    puts 'Are you sure you want to delete the last player added? Enter (Y/N).'.bold.yellow
+    gets.chomp
+  end
+
+  def you_serious
+    puts "Are you sure you want to delete the selected player? Enter (Y/N).".bold.yellow
     gets.chomp
   end
 
@@ -114,7 +128,7 @@ def run
           puts "Invalid response. Please enter Y/N.".bold.red
         end
       else
-        puts "Invalid name or player already drafted. Select another player.".bold.red
+        puts "Invalid name or player already drafted.".bold.red
         redo
       end
     #this is the method to call a player by position
@@ -142,7 +156,7 @@ def run
                 puts "Invalid response. Please enter Y/N.".bold.red
               end
           else
-            puts "Invalid name or player already drafted. Select another player.".bold.red
+            puts "Invalid name or player already drafted.".bold.red
           end
       else
         puts "Invalid response. Please enter C/G/F.".bold.red
@@ -173,13 +187,46 @@ def run
               puts "Invalid response. Please enter Y/N.".bold.red
             end
           else
-            puts "Invalid name or player already drafted. Select another player.".bold.red
+            puts "Invalid name or player already drafted.".bold.red
           end
         else
-          puts "Invalid name. Please spell-check.".bold.red
+          puts "Invalid name. Please spell-check. Enter full team name.".bold.red
         end
-    #this is the method to delete your roster
     elsif input == "4"
+      yes_or_no = new_cli.are_you_really_sure
+      if yes_or_no == "Y" || yes_or_no == "y"
+        new_user.roster
+        player_name = new_user.delete_last_added_player
+        puts "#{player_name.full_name} deleted from roster.".bold.yellow
+        #binding.pry
+        new_user.reload
+        puts "Current roster: #{new_user.roster}"
+        #binding.pry
+        redo
+      elsif yes_or_no == "N" || yes_or_no == "n"
+        redo
+      else
+        puts "Invalid response. Please enter Y/N.".bold.red
+      end
+    elsif input == "5"
+      player_name = new_cli.input_player_name
+      yes_or_no = new_cli.you_serious
+      if (yes_or_no == "Y" || yes_or_no == "y") && new_user.current_roster.include?(player_name)
+        new_user.roster
+        new_user.delete_selected_player(player_name)
+        puts "#{player_name} removed from roster.".bold.yellow
+        #binding.pry
+        new_user.reload
+        puts "Current roster: #{new_user.roster}"
+        #binding.pry
+        redo
+      elsif yes_or_no == "N" || yes_or_no == "n"
+        redo
+      else
+        puts "Invalid response. Please enter Y/N.".bold.red
+      end
+    #this is the method to delete your roster
+    elsif input == "6"
       yes_or_no = new_cli.are_you_sure
       if yes_or_no == "Y" || yes_or_no == "y"
         new_user.roster
@@ -195,11 +242,13 @@ def run
         puts "Invalid response. Please enter Y/N.".bold.red
       end
     #this is the method to break the loop
-    elsif input == "5"
-      puts "K".bold.cyan
+    elsif input == "7"
+      puts "K".bold.magenta
       break
+    elsif input == "Heisenberg"
+      puts "You're goddamn right.".bold.cyan
     else
-      puts "Invalid response. Please enter 1, 2, or 3.".bold.red
+      puts "Invalid response. Please enter 1 - 5.".bold.red
     end
   end
 end

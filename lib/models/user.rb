@@ -5,8 +5,12 @@ class User < ActiveRecord::Base
 
   attr_accessor :roster
 
-  def roster
+  def current_roster
     self.players.map { |player| player.full_name }
+  end
+
+  def roster
+    self.players.map { |player| player.full_name + ", " + player.position }
   end
 
   def add_player_to_roster(player)
@@ -15,6 +19,15 @@ class User < ActiveRecord::Base
 
   def self.all_drafted_players
     User.all.map { |user| user.roster }.flatten
+  end
+
+  def delete_last_added_player
+    self.players.last.destroy
+  end
+
+  def delete_selected_player(player_name)
+    del = self.players.find_by(full_name: player_name)
+    del.destroy
   end
 
   def delete_roster
