@@ -3,7 +3,7 @@ require 'pry'
 class CommandLineInterface
 
   def greet
-    puts 'Welcome to the NBA Fantasy Mock Draft. Please enter your name.'.bold.yellow
+    puts 'Welcome to the NBA Fantasy Mock Draft. Please enter your name.'.bold.green
     gets.chomp
   end
 
@@ -13,30 +13,30 @@ class CommandLineInterface
   end
 
   def input_selection_choice
-    puts "To search a player by name, enter 1.".bold.yellow
+    puts "To search a player by name, enter 1.".bold.green
     sleep(1)
-    puts 'To search players by position, enter 2.'.bold.yellow
+    puts 'To search players by position, enter 2.'.bold.green
     sleep(1)
-    puts "To search players by team, enter 3.".bold.yellow
+    puts "To search players by team, enter 3.".bold.green
     sleep(1)
-    puts "To delete your current roster, enter 4.".bold.green
+    puts "To delete your current roster, enter 4.".bold.yellow
     sleep(1)
     puts "To exit the NBA Fantasy Mock Draft application, enter 5.".bold.red
     gets.chomp
   end
 
   def input_player_name
-    puts 'Enter player name.'.bold.yellow
+    puts 'Enter player name.'.bold.green
     gets.chomp
   end
 
   def input_player_position
-    puts 'Enter player position: C(centers), G(guards), and F(forwards).'.bold.yellow
+    puts 'Enter player position: C(centers), G(guards), and F(forwards).'.bold.green
     gets.chomp
   end
 
   def input_player_team
-    puts "Enter team name.".bold.yellow
+    puts "Enter team name.".bold.green
     gets.chomp
   end
 
@@ -61,12 +61,12 @@ class CommandLineInterface
   end
 
   def ask_user_add(player_name)
-    puts "Add #{player_name.full_name} to your roster? Enter (Y/N).".bold.yellow
+    puts "Add #{player_name.full_name} to your roster? Enter (Y/N).".bold.green
     gets.chomp
   end
 
   def are_you_sure
-    puts "Are you sure you want to delete your current roster? Enter (Y/N).".bold.green
+    puts "Are you sure you want to delete your current roster? Enter (Y/N).".bold.yellow
     gets.chomp
   end
 
@@ -90,8 +90,8 @@ def run
     team_all = Player.all.map {|player| player.team_name}
     input = new_cli.input_selection_choice
     if new_user.roster.length > 4
-      puts "Roster full.".bold.green
-      puts new_user.roster.bold.green
+      puts "Roster full. Thanks for using our app.".bold.cyan
+      puts new_user.roster
       break
     #this is the method to call a player by name.
     elsif input == "1"
@@ -102,11 +102,13 @@ def run
         if (yes_or_no == 'Y' || yes_or_no == 'y') && !new_user.roster.include?(player_name.full_name)
           new_user.add_player_to_roster(player_name)
           new_user.reload
+          puts "Current roster: #{new_user.roster}"
           #user_roster +=1
         elsif new_user.roster.include?(player_name.full_name)
           puts "Player already in roster. Select again.".bold.red
           redo
         elsif yes_or_no == 'N' || yes_or_no == 'n'
+          puts "Current roster: #{new_user.roster}"
           redo
         else
           puts "Invalid response. Please enter Y/N.".bold.red
@@ -128,11 +130,13 @@ def run
               if (yes_or_no == 'Y' || yes_or_no == 'y') && !new_user.roster.include?(player_name.full_name)
                 new_user.add_player_to_roster(player_name)
                 new_user.reload
+                puts "Current roster: #{new_user.roster}"
                 #user_roster +=1
               elsif new_user.roster.include?(player_name.full_name)
                 puts "Player already in roster. Select again.".bold.red
                 redo
               elsif yes_or_no == 'N' || yes_or_no == 'n'
+                puts "Current roster: #{new_user.roster}"
                 redo
               else
                 puts "Invalid response. Please enter Y/N.".bold.red
@@ -157,11 +161,13 @@ def run
             if (yes_or_no == 'Y' || yes_or_no == 'y') && !new_user.roster.include?(player_name.full_name)
               new_user.add_player_to_roster(player_name)
               new_user.reload
+              puts "Current roster: #{new_user.roster}"
               #user_roster +=1
             elsif new_user.roster.include?(player_name.full_name)
               puts "Player already in roster. Select again.".bold.red
               redo
             elsif yes_or_no == 'N' || yes_or_no == 'n'
+              puts "Current roster: #{new_user.roster}"
               redo
             else
               puts "Invalid response. Please enter Y/N.".bold.red
@@ -178,6 +184,7 @@ def run
       if yes_or_no == "Y" || yes_or_no == "y"
         new_user.roster
         new_user.delete_roster
+        puts "Roster empty.".bold.yellow
         #binding.pry
         new_user.reload
         #binding.pry
