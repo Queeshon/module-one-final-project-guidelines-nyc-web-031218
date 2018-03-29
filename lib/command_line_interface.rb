@@ -19,7 +19,9 @@ class CommandLineInterface
     sleep(1)
     puts "To search players by team, enter 3.".bold.yellow
     sleep(1)
-    puts "To exit the NBA Fantasy Mock Draft application, enter 4.".bold.red
+    puts "To delete your current roster, enter 4.".bold.green
+    sleep(1)
+    puts "To exit the NBA Fantasy Mock Draft application, enter 5.".bold.red
     gets.chomp
   end
 
@@ -62,6 +64,12 @@ class CommandLineInterface
     puts "Add #{player_name.full_name} to your roster? Enter (Y/N).".bold.yellow
     gets.chomp
   end
+
+  def are_you_sure
+    puts "Are you sure you want to delete your current roster? Enter (Y/N).".bold.green
+    gets.chomp
+  end
+
 end
 
 def check_roster(player_name)
@@ -164,8 +172,23 @@ def run
         else
           puts "Invalid name. Please spell-check.".bold.red
         end
-    #this is the method to break the loop
+    #this is the method to delete your roster
     elsif input == "4"
+      yes_or_no = new_cli.are_you_sure
+      if yes_or_no == "Y" || yes_or_no == "y"
+        new_user.roster
+        new_user.delete_roster
+        #binding.pry
+        new_user.reload
+        #binding.pry
+        redo
+      elsif yes_or_no == "N" || yes_or_no == "n"
+        redo
+      else
+        puts "Invalid response. Please enter Y/N.".bold.red
+      end
+    #this is the method to break the loop
+    elsif input == "5"
       puts "K".bold.cyan
       break
     else

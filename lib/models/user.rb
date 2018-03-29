@@ -2,6 +2,9 @@ class User < ActiveRecord::Base
   has_many :drafts
   has_many :players, through: :drafts
 
+
+  attr_accessor :roster
+
   def roster
     self.players.map { |player| player.full_name }
   end
@@ -14,4 +17,9 @@ class User < ActiveRecord::Base
     User.all.map { |user| user.roster }.flatten
   end
 
+  def delete_roster
+    #binding.pry
+    self.players = []
+    #binding.pry
+  end
 end
