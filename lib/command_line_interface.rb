@@ -195,7 +195,7 @@ def run
     elsif input == "4"
       yes_or_no = new_cli.are_you_really_sure
       player = new_user.players.last
-      if yes_or_no == "Y" || yes_or_no == "y"
+      if (yes_or_no == "Y" || yes_or_no == "y") && !new_user.roster == nil
         player_name = new_user.delete_last_added_player(player)
         puts "#{player.full_name} deleted from roster.".bold.yellow
         #binding.pry
@@ -203,6 +203,7 @@ def run
         puts "Current roster: #{new_user.roster}"
         #binding.pry
         redo
+        puts "Roster already empty.".bold.
       elsif yes_or_no == "N" || yes_or_no == "n"
         redo
       else
