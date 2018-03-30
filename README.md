@@ -15,5 +15,8 @@ their rosters and start over. Enjoy!
 4. To search by player, enter 1.
 5. To search by position, enter 2.
 6. To search by team, enter 3.
-7. To delete your current roster, enter 4.
-8. To exit the NBA Fantasy Mock Draft application, enter 5.
+7. To delete last player added, enter 4.
+8. To delete a specific player, enter 5.
+9. To delete your current roster, enter 6.
+10
+. To exit the NBA Fantasy Mock Draft application, enter 7.

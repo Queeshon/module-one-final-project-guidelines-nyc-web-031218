@@ -14,17 +14,17 @@ class CommandLineInterface
 
   def input_selection_choice
     puts "To search a player by name, enter 1.".bold.green
-    sleep(1)
+    #sleep(1)
     puts 'To search players by position, enter 2.'.bold.green
-    sleep(1)
+    #sleep(1)
     puts "To search players by team, enter 3.".bold.green
-    sleep(1)
+    #sleep(1)
     puts "To delete the last player added, enter 4.".bold.yellow
-    sleep(1)
+    #sleep(1)
     puts "To delete a specific player, enter 5.".bold.yellow
-    sleep(1)
+    #sleep(1)
     puts "To delete your current roster, enter 6.".bold.yellow
-    sleep(1)
+    #sleep(1)
     puts "To exit the NBA Fantasy Mock Draft application, enter 7.".bold.red
     gets.chomp
   end
@@ -194,10 +194,10 @@ def run
         end
     elsif input == "4"
       yes_or_no = new_cli.are_you_really_sure
+      player = new_user.players.last
       if yes_or_no == "Y" || yes_or_no == "y"
-        new_user.roster
-        player_name = new_user.delete_last_added_player
-        puts "#{player_name.full_name} deleted from roster.".bold.yellow
+        player_name = new_user.delete_last_added_player(player)
+        puts "#{player.full_name} deleted from roster.".bold.yellow
         #binding.pry
         new_user.reload
         puts "Current roster: #{new_user.roster}"
@@ -210,10 +210,11 @@ def run
       end
     elsif input == "5"
       player_name = new_cli.input_player_name
+      player = Player.find_by(full_name: player_name)
       yes_or_no = new_cli.you_serious
-      if (yes_or_no == "Y" || yes_or_no == "y") && new_user.current_roster.include?(player_name)
+      if (yes_or_no == "Y" || yes_or_no == "y") && new_user.roster.include?(player_name)
         new_user.roster
-        new_user.delete_selected_player(player_name)
+        new_user.delete_selected_player(player)
         puts "#{player_name} removed from roster.".bold.yellow
         #binding.pry
         new_user.reload
